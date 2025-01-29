@@ -13,9 +13,10 @@ CountLabel.Size = UDim2.new(0, 300, 0, 50)
 CountLabel.Position = UDim2.new(0.5, -150, 0, 20) -- Centered at the top
 CountLabel.Font = Enum.Font.SourceSans
 CountLabel.Text = "Stars Collected: 0"
+CountLabel.Text.Size = 70
 CountLabel.TextColor3 = Color3.new(1, 1, 1)
 CountLabel.BackgroundTransparency = 1
-CountLabel.TextScaled = true
+CountLabel.TextScaled = false
 CountLabel.Parent = ScreenGui
 
 local totalStarsCollected = 0  -- Initialize a variable to keep track of stars collected
