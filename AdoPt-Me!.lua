@@ -16,14 +16,14 @@ CountLabel.Text = "Stars Collected: 0"
 CountLabel.Text.Size = 70
 CountLabel.TextColor3 = Color3.new(1, 1, 1)
 CountLabel.BackgroundTransparency = 1
-CountLabel.TextScaled = false
+CountLabel.TextScaled = true
 CountLabel.Parent = ScreenGui
 
 local totalStarsCollected = 0  -- Initialize a variable to keep track of stars collected
 
 -- Update the star count when the event is received
 ShootingStarCollected.OnClientEvent:Connect(function(currentStarCount)
-    CountLabel.Text = "Stars Collected goes up to 1000: " .. tostring(currentStarCount)
+    CountLabel.Text = "Stars Collected: " .. tostring(currentStarCount)
 end)
 
 -- Function to collect stars in a continuous loop
