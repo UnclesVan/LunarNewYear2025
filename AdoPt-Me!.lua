@@ -22,7 +22,7 @@ local totalStarsCollected = 0  -- Initialize a variable to keep track of stars c
 
 -- Update the star count when the event is received
 ShootingStarCollected.OnClientEvent:Connect(function(currentStarCount)
-    CountLabel.Text = "Stars Collected: " .. tostring(currentStarCount)
+    CountLabel.Text = "Stars Collected goes up to 1000: " .. tostring(currentStarCount)
 end)
 
 -- Function to collect stars in a continuous loop
@@ -41,7 +41,7 @@ local function collectStarsLoop()
 
             -- Increment the count of collected stars locally
             totalStarsCollected += 1  
-            CountLabel.Text = "Stars Collected: " .. tostring(totalStarsCollected)
+            CountLabel.Text = "Stars Collected goes up to 1000: " .. tostring(totalStarsCollected)
 
             wait(1)  -- Introduce a delay to prevent overwhelming the server
         end
