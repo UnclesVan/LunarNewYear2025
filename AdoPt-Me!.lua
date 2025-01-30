@@ -56,10 +56,6 @@ local function collectStarsLoop()
     end
 end
 
--- Start the continuous collection of stars
-collectStarsLoop()
-
-
 -- LNY2025GlitchZoneCollector 
 
 
@@ -113,6 +109,10 @@ local function collectStarsLoop()
         wait(2)  -- Wait period after collecting all stars before restarting the loop
     end
 end
+
+-- Start the continuous collection of stars
+
+collectStarsLoop()
 
 -- Start the continuous collection of stars
 collectStarsLoop()
