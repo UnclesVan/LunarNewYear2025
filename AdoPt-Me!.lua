@@ -70,7 +70,7 @@ local function updateCollectingText(mapType, starID)
     if mapType == "MainMap" then
         mainMapLabel.Text = "Collecting star ID " .. starID .. " in MainMap"
     elseif mapType == "LNY2025GlitchZone" then
-        glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in LNY2025GlitchZone"
+        glitchZoneLabel.Text = "" .. starID .. "  MOON GLITCH ZONE NOT IN DATA FILES YET"
     elseif mapType == "MoonInterior" then
         moonInteriorLabel.Text = "Collecting star ID " .. starID .. " in MoonInterior"
     end
