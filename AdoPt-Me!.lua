@@ -4,6 +4,8 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/UnclesVan/AdoPtMe-/r
 
 
 
+
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local ScreenGui = Instance.new("ScreenGui")
@@ -42,7 +44,6 @@ titleLabel.Parent = titleFrame
 local inDevLabel = Instance.new("TextLabel")
 inDevLabel.Size = UDim2.new(0.25, 0, 0.1, 0) -- Width and height of the label
 inDevLabel.Position = UDim2.new(0.375, 0, 0.65, 0) -- Centered above the main frame
-inDevLabel.Text = "IN DEV"
 inDevLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red color for visibility
 inDevLabel.BackgroundTransparency = 1 -- Fully transparent background
 inDevLabel.TextScaled = true -- Scale text to fit the label
@@ -214,6 +215,21 @@ frame.InputEnded:Connect(endDrag)
 closeButton.InputBegan:Connect(startDrag)
 closeButton.InputChanged:Connect(updateDrag)
 closeButton.InputEnded:Connect(endDrag)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+   
 
 
 
