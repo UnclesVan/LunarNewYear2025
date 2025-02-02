@@ -40,15 +40,6 @@ titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text for the titl
 titleLabel.TextScaled = true
 titleLabel.Parent = titleFrame
 
--- Adding an "IN DEV" label positioned outside the main frame
-local inDevLabel = Instance.new("TextLabel")
-inDevLabel.Size = UDim2.new(0.25, 0, 0.1, 0) -- Width and height of the label
-inDevLabel.Position = UDim2.new(0.375, 0, 0.65, 0) -- Centered above the main frame
-inDevLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red color for visibility
-inDevLabel.BackgroundTransparency = 1 -- Fully transparent background
-inDevLabel.TextScaled = true -- Scale text to fit the label
-inDevLabel.Parent = ScreenGui -- Parent to the ScreenGUI for visibility
-
 -- Close Button positioned inside the frame
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0.07, 0, 0.07, 0) -- Increased size for the close button (7% width and height)
