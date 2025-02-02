@@ -138,7 +138,7 @@ local function collectSpecialStar()
             [2] = "13",  -- Special star ID
             [3] = true
         }
-        ShootingStarCollected:FireServer(unpack(args))
+        MoonAPI/ShootingStarCollected:FireServer(unpack(args))
         specialStarCount = specialStarCount + 1  -- Increment the special stars count
         specialStarsLabel.Text = "Special Stars Count: " .. specialStarCount  -- Update label text
         updateCollectingText("MoonInterior", "13")  -- Update UI for special star collection
@@ -157,7 +157,6 @@ local function collectStarsLoop(mapName, startID)
         wait(0.1) -- Wait for the adjusted collection speed
     end
 end
-
 -- Function to start all collection loops
 local function startAllCollectingLoops()
     coroutine.wrap(collectStarsLoop)("MainMap", 100) -- Start collecting in MainMap
