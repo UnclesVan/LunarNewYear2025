@@ -3,6 +3,7 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/UnclesVan/AdoPtMe-/r
 
 
 
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local ScreenGui = Instance.new("ScreenGui")
@@ -23,7 +24,7 @@ frame.Parent = ScreenGui
 
 -- Smaller TextLabel for MainMap
 local mainMapLabel = Instance.new("TextLabel")
-mainMapLabel.Size = UDim2.new(1, 0, 0.33, 0) -- Adjusted height
+mainMapLabel.Size = UDim2.new(1, 0, 0.3, 0) -- Adjusted height
 mainMapLabel.Position = UDim2.new(0, 0, 0, 0)
 mainMapLabel.Text = "Collecting Stars in MainMap..."
 mainMapLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -31,25 +32,38 @@ mainMapLabel.BackgroundTransparency = 1
 mainMapLabel.TextScaled = true
 mainMapLabel.Parent = frame
 
--- Smaller TextLabel for LNY2025GlitchZone
+-- TextLabel for Glitch Zone
 local glitchZoneLabel = Instance.new("TextLabel")
-glitchZoneLabel.Size = UDim2.new(1, 0, 0.33, 0) -- Adjusted height
-glitchZoneLabel.Position = UDim2.new(0, 0, 0.33, 0)
+glitchZoneLabel.Size = UDim2.new(1, 0, 0.3, 0) -- Adjusted height
+glitchZoneLabel.Position = UDim2.new(0, 0, 0.3, 0)
 glitchZoneLabel.Text = "MOON GLITCH ZONE NOT IN DATA FILES YET"
 glitchZoneLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 glitchZoneLabel.BackgroundTransparency = 1
 glitchZoneLabel.TextScaled = true
 glitchZoneLabel.Parent = frame
 
+-- TextLabel for Special Stars Count
+local specialStarsLabel = Instance.new("TextLabel")
+specialStarsLabel.Size = UDim2.new(1, 0, 0.3, 0) -- Adjusted height
+specialStarsLabel.Position = UDim2.new(0, 0, 0.6, 0)
+specialStarsLabel.Text = "Special Stars Collected: 0"
+specialStarsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+specialStarsLabel.BackgroundTransparency = 1
+specialStarsLabel.TextScaled = true
+specialStarsLabel.Parent = frame
+
 -- Smaller TextLabel for MoonInterior
 local moonInteriorLabel = Instance.new("TextLabel")
-moonInteriorLabel.Size = UDim2.new(1, 0, 0.33, 0) -- Adjusted height
-moonInteriorLabel.Position = UDim2.new(0, 0, 0.67, 0)
+moonInteriorLabel.Size = UDim2.new(1, 0, 0.3, 0) -- Adjusted height
+moonInteriorLabel.Position = UDim2.new(0, 0, 0.9, 0)
 moonInteriorLabel.Text = "Collecting Stars in MoonInterior..."
 moonInteriorLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 moonInteriorLabel.BackgroundTransparency = 1
 moonInteriorLabel.TextScaled = true
 moonInteriorLabel.Parent = frame
+
+-- Counter for special stars collected
+local specialStarCount = 0
 
 -- Function to update the label text accordingly
 local function updateCollectingText(mapType, starID)
@@ -70,10 +84,12 @@ local function collectSpecialStar()
         [3] = true
     }
     ShootingStarCollected:FireServer(unpack(args))
+    specialStarCount = specialStarCount + 1  -- Increment the special stars count
+    specialStarsLabel.Text = "Special Stars Collected: " .. specialStarCount  -- Update the label
     updateCollectingText("MoonInterior", "13")  -- Update the UI to reflect the collection of the special star
 end
 
--- Existing collection loops
+-- Collection loop for Main Map
 local function collectStarsLoopMainMap()
     local currentMapName = "MainMap"
 
@@ -87,6 +103,7 @@ local function collectStarsLoopMainMap()
     end
 end
 
+-- Collection loop for Glitch Zone
 local function collectStarsLoopGlitchZone()
     local currentMapName = "LNY2025GlitchZone"
 
@@ -100,6 +117,7 @@ local function collectStarsLoopGlitchZone()
     end
 end
 
+-- Collection loop for Moon Interior
 local function collectStarsLoopMoonInterior()
     local currentMapName = "MoonInterior"
 
@@ -121,11 +139,6 @@ wait(1)  -- Wait a moment after collecting the special star
 coroutine.wrap(collectStarsLoopMainMap)()
 coroutine.wrap(collectStarsLoopGlitchZone)()
 coroutine.wrap(collectStarsLoopMoonInterior)()
-
-
-
-
-
 
 
 
