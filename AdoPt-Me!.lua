@@ -4,9 +4,6 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/UnclesVan/AdoPtMe-/r
 
 
 
--- Adjustable collection speed in seconds
-local collectionSpeed = 0.1  -- 0.1 seconds is approximately 10 times per second
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local ScreenGui = Instance.new("ScreenGui")
@@ -17,57 +14,80 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 ScreenGui.Parent = playerGui
 
--- Create a Frame to hold the UI elements
+-- Main frame with a smaller size for positioning
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0.25, 0, 0.4, 0) -- Width and height of the frame
-frame.Position = UDim2.new(0.375, 0, 0.05, 0) -- Centered position
+frame.Position = UDim2.new(0.375, 0, 0.25, 0) -- Position below the title frame
 frame.BackgroundTransparency = 0.5
 frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 frame.Parent = ScreenGui
 
--- Close Button positioned outside the frame
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0.05, 0, 0.05, 0) -- Adjusted width for appearance [X]
-closeButton.Position = UDim2.new(0.375, 0, 0.45, 0) -- Centered horizontally and just below the frame
-closeButton.Text = "X" -- Set the text to "X" for visibility
-closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red color
-closeButton.BorderColor3 = Color3.fromRGB(255, 0, 0) -- Red border color
-closeButton.BorderSizePixel = 2
-closeButton.Parent = ScreenGui -- Add the button directly to the ScreenGui
+-- Create a UI for the title within the main frame
+local titleFrame = Instance.new("Frame")
+titleFrame.Size = UDim2.new(1, 0, 0.2, 0) -- Adjust size to fit the frame width
+titleFrame.Position = UDim2.new(0, 0, -0.2, 0) -- Position above the main frame
+titleFrame.BackgroundTransparency = 0 -- Background is now visible
+titleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Optional color for visibility
+titleFrame.Parent = frame -- Make it a child of the main frame
 
--- Smaller TextLabel for MainMap
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 1, 0)  -- Fill the title frame
+titleLabel.Position = UDim2.new(0, 0, 0, 0)  -- Position at the top left corner
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text for the title
+titleLabel.TextScaled = true
+titleLabel.Parent = titleFrame
+
+-- Adding an "IN DEV" label positioned outside the main frame
+local inDevLabel = Instance.new("TextLabel")
+inDevLabel.Size = UDim2.new(0.25, 0, 0.1, 0) -- Width and height of the label
+inDevLabel.Position = UDim2.new(0.375, 0, 0.65, 0) -- Centered above the main frame
+inDevLabel.Text = "IN DEV"
+inDevLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red color for visibility
+inDevLabel.BackgroundTransparency = 1 -- Fully transparent background
+inDevLabel.TextScaled = true -- Scale text to fit the label
+inDevLabel.Parent = ScreenGui -- Parent to the ScreenGUI for visibility
+
+-- Close Button positioned inside the frame
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.07, 0, 0.07, 0) -- Increased size for the close button (7% width and height)
+closeButton.Position = UDim2.new(0.95, 0, 0, 0) -- Top right corner of the frame
+closeButton.Text = "X" -- Set the text to "X" for visibility
+closeButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green color
+closeButton.BorderColor3 = Color3.fromRGB(0, 200, 0) -- Slightly darker green border color
+closeButton.BorderSizePixel = 2
+closeButton.Parent = frame -- Add the button inside the frame
+
+-- Smaller TextLabels for different zones
 local mainMapLabel = Instance.new("TextLabel")
-mainMapLabel.Size = UDim2.new(1, 0, 0.25, 0) -- Adjusted height
-mainMapLabel.Position = UDim2.new(0, 0, 0, 0)
+mainMapLabel.Size = UDim2.new(1, 0, 0.25, 0)
+mainMapLabel.Position = UDim2.new(0, 0, 0.0, 0)
 mainMapLabel.Text = "Collecting Stars in MainMap..."
 mainMapLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainMapLabel.BackgroundTransparency = 1
 mainMapLabel.TextScaled = true
 mainMapLabel.Parent = frame
 
--- TextLabel for Glitch Zone
 local glitchZoneLabel = Instance.new("TextLabel")
-glitchZoneLabel.Size = UDim2.new(1, 0, 0.25, 0) -- Adjusted height
+glitchZoneLabel.Size = UDim2.new(1, 0, 0.25, 0)
 glitchZoneLabel.Position = UDim2.new(0, 0, 0.25, 0)
-glitchZoneLabel.Text = "MOON GLITCH ZONE NOT IN DATA FILES YET"
+glitchZoneLabel.Text = "Collecting Stars in LNY2025GlitchZone..."
 glitchZoneLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 glitchZoneLabel.BackgroundTransparency = 1
 glitchZoneLabel.TextScaled = true
 glitchZoneLabel.Parent = frame
 
--- TextLabel for Special Stars Count
 local specialStarsLabel = Instance.new("TextLabel")
-specialStarsLabel.Size = UDim2.new(1, 0, 0.25, 0) -- Adjusted height
+specialStarsLabel.Size = UDim2.new(1, 0, 0.25, 0)
 specialStarsLabel.Position = UDim2.new(0, 0, 0.5, 0)
-specialStarsLabel.Text = "Special Stars Count: 0"  -- Updated label text
+specialStarsLabel.Text = "Special Stars Count: 0" 
 specialStarsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 specialStarsLabel.BackgroundTransparency = 1
 specialStarsLabel.TextScaled = true
 specialStarsLabel.Parent = frame
 
--- Smaller TextLabel for MoonInterior
 local moonInteriorLabel = Instance.new("TextLabel")
-moonInteriorLabel.Size = UDim2.new(1, 0, 0.25, 0) -- Adjusted height
+moonInteriorLabel.Size = UDim2.new(1, 0, 0.25, 0)
 moonInteriorLabel.Position = UDim2.new(0, 0, 0.75, 0)
 moonInteriorLabel.Text = "Collecting Stars in MoonInterior..."
 moonInteriorLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -78,12 +98,36 @@ moonInteriorLabel.Parent = frame
 -- Counter for special stars collected
 local specialStarCount = 0
 
--- Function to update the label text accordingly
+-- Attempt to get the EventTime text
+local function getEventTimeText()
+    local eventTime = player.PlayerGui:FindFirstChild("QuestIconApp") and player.PlayerGui.QuestIconApp.ImageButton.EventContainer.EventFrame.EventImageBottom.EventTime
+    return eventTime and eventTime.Text or "Event Time Not Available"
+end
+
+-- Function to update the title with the EventTime text
+local function updateTitle()
+    titleLabel.Text = getEventTimeText()
+end
+
+updateTitle() -- Set the initial title text
+
+-- Update the title every second
+local function startTitleUpdater()
+    while true do
+        updateTitle()
+        wait(1)
+    end
+end
+
+-- Initiate the title updater coroutine
+coroutine.wrap(startTitleUpdater)()
+
+-- Function to update the collecting text accordingly
 local function updateCollectingText(mapType, starID)
     if mapType == "MainMap" then
         mainMapLabel.Text = "Collecting star ID " .. starID .. " in MainMap"
     elseif mapType == "MOON GLITCH ZONE NOT IN DATA FILES YET" then
-        glitchZoneLabel.Text = "MOON GLITCH ZONE NOT IN DATA FILES YET " .. starID .. ""
+        glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in LNY2025GlitchZone"
     elseif mapType == "MoonInterior" then
         moonInteriorLabel.Text = "Collecting star ID " .. starID .. " in MoonInterior"
     end
@@ -91,15 +135,18 @@ end
 
 -- Function to collect the special star for MoonInterior
 local function collectSpecialStar()
-    local args = {
-        [1] = "MoonInterior",
-        [2] = "13",  -- Special star ID
-        [3] = true
-    }
-    ShootingStarCollected:FireServer(unpack(args))
-    specialStarCount = specialStarCount + 1  -- Increment the special stars count
-    specialStarsLabel.Text = "Special Stars Count: " .. specialStarCount  -- Updated label format
-    updateCollectingText("MoonInterior", "13")  -- Update the UI to reflect the collection of the special star
+    while true do -- Loop for collecting the special star
+        local args = {
+            [1] = "MoonInterior",
+            [2] = "13",  -- Special star ID
+            [3] = true
+        }
+        ShootingStarCollected:FireServer(unpack(args))
+        specialStarCount = specialStarCount + 1  -- Increment the special stars count
+        specialStarsLabel.Text = "Special Stars Count: " .. specialStarCount  -- Update label text
+        updateCollectingText("MoonInterior", "13")  -- Update UI for special star collection
+        wait(10)  -- Wait in between special star collections (adjust as necessary)
+    end
 end
 
 -- Functions to collect stars depending on the map type
@@ -108,9 +155,9 @@ local function collectStarsLoop(mapName, startID)
         for starID = startID, startID + 900 do -- Adjusting to your ID range
             updateCollectingText(mapName, tostring(starID)) -- Update the collecting text
             ShootingStarCollected:FireServer(mapName, tostring(starID))
-            wait(collectionSpeed)  -- Wait for the adjusted collection speed
+            wait(0.1) -- Wait for the adjusted collection speed
         end
-        wait(collectionSpeed)  -- Wait for the adjusted collection speed
+        wait(0.1) -- Wait for the adjusted collection speed
     end
 end
 
@@ -124,19 +171,58 @@ end
 -- Function to close the UI when the close button is clicked
 closeButton.MouseButton1Click:Connect(function()
     print("Close button clicked") -- Debugging line to see if the function is called
-    
     frame:Destroy() -- Destroy the frame
     closeButton:Destroy() -- Destroy the close button
-    
-    -- Destroying ScreenGui would close the entire screen so it should be handled properly.
 end)
 
--- Collect the special star first, then start the loops
-collectSpecialStar()  -- Fire the special star
-wait(1)  -- Wait a moment after collecting the special star
+-- Start collecting special star in a separate coroutine
+coroutine.wrap(collectSpecialStar)()  -- Fire the special star collection in parallel
 
--- Start the loops in parallel
+-- Start the loops in parallel for other star collections
 startAllCollectingLoops()
+
+-- Dragging functionality for the frame
+local dragging = false
+local dragStart = nil
+local startPos = nil
+
+local function startDrag(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position 
+        startPos = frame.Position 
+    end
+end
+
+local function updateDrag(input)
+    if dragging then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end
+
+local function endDrag()
+    dragging = false
+end
+
+-- Connect dragging to the frame
+frame.InputBegan:Connect(startDrag)
+frame.InputChanged:Connect(updateDrag)
+frame.InputEnded:Connect(endDrag)
+
+-- Connect dragging to the close button
+closeButton.InputBegan:Connect(startDrag)
+closeButton.InputChanged:Connect(updateDrag)
+closeButton.InputEnded:Connect(endDrag)
+
+
+
+
+
+
+
+
+
 
 
 
