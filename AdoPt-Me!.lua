@@ -16,8 +16,7 @@ local Players = game:GetService("Players")
 local ScreenGui = Instance.new("ScreenGui")
 
 -- Updated this line to conform to the specified API structure
-local ShootingStarCollected = game:GetService("ReplicatedStorage").API["MoonAPI/ShootingStarCollected"]
-
+local ShootingStarCollected = ReplicatedStorage.API["MoonAPI/ShootingStarCollected"]
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -132,26 +131,29 @@ local function updateCollectingText(mapType, starID)
     end
 end
 
--- Function to collect the special star for MoonInterior
+-- Function to collect the special stars for MoonInterior and MainMap
 local function collectSpecialStar()
-    while true do -- Loop for collecting the special star
-        local args = {
+    while true do -- Loop for collecting the special stars
+        -- Collect special star for MoonInterior
+        local argsMoonInterior = {
             [1] = "MoonInterior",
-            [2] = "13",  -- Special star ID
+            [2] = "13",  -- Special star ID for MoonInterior
             [3] = true
         }
-      
-        -- Correctly reference the ShootingStarCollected event
-        local specialArgs = {
+        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
+
+        -- Collect special star for MainMap
+        local argsMainMap = {
             [1] = "MainMap",
-            [2] = "25"
+            [2] = "111",  -- Special star ID for MainMap
+            [3] = true
         }
+        ShootingStarCollected:FireServer(unpack(argsMainMap))
 
-        ShootingStarCollected:FireServer(unpack(args))
-
-        specialStarCount = specialStarCount + 1  -- Increment the special stars count
-        specialStarsLabel.Text = "Special Stars Count: " .. specialStarCount  -- Update label text
+        specialStarCount = specialStarCount + 2  -- Increment the special stars count by 2
+        specialStarsLabel.Text = "Special Stars Count: " .. specialStarCount  -- Update label text for both collections
         updateCollectingText("MoonInterior", "13")  -- Update UI for special star collection
+        updateCollectingText("MainMap", "111")  -- Update UI for the additional star collection
         wait(10)  -- Wait in between special star collections (adjust as necessary)
     end
 end
@@ -182,7 +184,7 @@ closeButton.MouseButton1Click:Connect(function()
     closeButton:Destroy() -- Destroy the close button
 end)
 
--- Start collecting special star in a separate coroutine
+-- Start collecting special stars in a separate coroutine
 coroutine.wrap(collectSpecialStar)()  -- Fire the special star collection in parallel
 
 -- Start the loops in parallel for other star collections
