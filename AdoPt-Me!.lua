@@ -9,8 +9,7 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/UnclesVan/AdoPtMe-/r
 
 
 
-
-
+-- Script to create and control a user interface for collecting stars on the moon
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local ScreenGui = Instance.new("ScreenGui")
@@ -22,92 +21,76 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 ScreenGui.Parent = playerGui
 
--- Main frame with a smaller size for positioning
+-- Frame setup
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.25, 0, 0.4, 0) -- Width and height of the frame
-frame.Position = UDim2.new(0.375, 0, 0.25, 0) -- Position below the title frame
+frame.Size = UDim2.new(0.25, 0, 0.4, 0)
+frame.Position = UDim2.new(0.375, 0, 0.25, 0)
 frame.BackgroundTransparency = 0.5
 frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 frame.Parent = ScreenGui
 
--- Create a UI for the title within the main frame
+-- Title Frame
 local titleFrame = Instance.new("Frame")
-titleFrame.Size = UDim2.new(1, 0, 0.2, 0) -- Adjust size to fit the frame width
-titleFrame.Position = UDim2.new(0, 0, -0.2, 0) -- Position above the main frame
-titleFrame.BackgroundTransparency = 0 -- Background is now visible
-titleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Optional color for visibility
-titleFrame.Parent = frame -- Make it a child of the main frame
+titleFrame.Size = UDim2.new(1, 0, 0.2, 0)
+titleFrame.Position = UDim2.new(0, 0, -0.2, 0)
+titleFrame.BackgroundTransparency = 0
+titleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+titleFrame.Parent = frame
 
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, 0, 1, 0)  -- Fill the title frame
-titleLabel.Position = UDim2.new(0, 0, 0, 0)  -- Position at the top left corner
+titleLabel.Size = UDim2.new(1, 0, 1, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text for the title
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextScaled = true
 titleLabel.Parent = titleFrame
 
--- Close Button positioned inside the frame
+-- Close Button
 local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0.07, 0, 0.07, 0) -- Increased size for the close button (7% width and height)
-closeButton.Position = UDim2.new(0.95, 0, 0, 0) -- Top right corner of the frame
-closeButton.Text = "X" -- Set the text to "X" for visibility
-closeButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green color
-closeButton.BorderColor3 = Color3.fromRGB(0, 200, 0) -- Slightly darker green border color
+closeButton.Size = UDim2.new(0.07, 0, 0.07, 0)
+closeButton.Position = UDim2.new(0.95, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+closeButton.BorderColor3 = Color3.fromRGB(0, 200, 0)
 closeButton.BorderSizePixel = 2
-closeButton.Parent = frame -- Add the button inside the frame
+closeButton.Parent = frame
 
--- Smaller TextLabels for different zones
-local mainMapLabel = Instance.new("TextLabel")
-mainMapLabel.Size = UDim2.new(1, 0, 0.25, 0)
-mainMapLabel.Position = UDim2.new(0, 0, 0.0, 0)
-mainMapLabel.Text = "Collecting Stars in MainMap..."
-mainMapLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-mainMapLabel.BackgroundTransparency = 1
-mainMapLabel.TextScaled = true
-mainMapLabel.Parent = frame
+-- Text Labels for Different Zones
+local mainMapLabel, glitchZoneLabel, specialStarsLabel, moonInteriorLabel
 
-local glitchZoneLabel = Instance.new("TextLabel")
-glitchZoneLabel.Size = UDim2.new(1, 0, 0.25, 0)
-glitchZoneLabel.Position = UDim2.new(0, 0, 0.25, 0)
-glitchZoneLabel.Text = "Collecting Stars in LNY2025GlitchZone..."
-glitchZoneLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-glitchZoneLabel.BackgroundTransparency = 1
-glitchZoneLabel.TextScaled = true
-glitchZoneLabel.Parent = frame
+-- Function that initializes the text labels
+local function createTextLabel(parent, position, labelText)
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, 0, 0.25, 0)
+    label.Position = position
+    label.Text = labelText
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.BackgroundTransparency = 1
+    label.TextScaled = true
+    label.Parent = parent
+    return label
+end
 
-local specialStarsLabel = Instance.new("TextLabel")
-specialStarsLabel.Size = UDim2.new(1, 0, 0.25, 0)
-specialStarsLabel.Position = UDim2.new(0, 0, 0.5, 0)
-specialStarsLabel.Text = "Special Stars Count: 0" 
-specialStarsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-specialStarsLabel.BackgroundTransparency = 1
-specialStarsLabel.TextScaled = true
-specialStarsLabel.Parent = frame
-
-local moonInteriorLabel = Instance.new("TextLabel")
-moonInteriorLabel.Size = UDim2.new(1, 0, 0.25, 0)
-moonInteriorLabel.Position = UDim2.new(0, 0, 0.75, 0)
-moonInteriorLabel.Text = "Collecting Stars in MoonInterior..."
-moonInteriorLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-moonInteriorLabel.BackgroundTransparency = 1
-moonInteriorLabel.TextScaled = true
-moonInteriorLabel.Parent = frame
+mainMapLabel = createTextLabel(frame, UDim2.new(0, 0, 0.0, 0), "Collecting Stars in MainMap...")
+glitchZoneLabel = createTextLabel(frame, UDim2.new(0, 0, 0.25, 0), "Collecting Stars in LNY2025GlitchZone...")
+specialStarsLabel = createTextLabel(frame, UDim2.new(0, 0, 0.5, 0), "Special Stars Count: 0")
+moonInteriorLabel = createTextLabel(frame, UDim2.new(0, 0, 0.75, 0), "Collecting Stars in MoonInterior...")
 
 -- Counter for special stars collected
 local specialStarCount = 0
 
--- Attempt to get the EventTime text
+-- Function to get Event Time Text
 local function getEventTimeText()
     local eventTime = player.PlayerGui:FindFirstChild("QuestIconApp") and player.PlayerGui.QuestIconApp.ImageButton.EventContainer.EventFrame.EventImageBottom.EventTime
     return eventTime and eventTime.Text or "Event Time Not Available"
 end
 
--- Function to update the title with the EventTime text
+-- Function to update the title
 local function updateTitle()
     titleLabel.Text = getEventTimeText()
 end
 
-updateTitle() -- Set the initial title text
+updateTitle()
 
 -- Update the title every second
 local function startTitleUpdater()
@@ -117,80 +100,79 @@ local function startTitleUpdater()
     end
 end
 
--- Initiate the title updater coroutine
 coroutine.wrap(startTitleUpdater)()
 
--- Function to update the collecting text accordingly
+-- Function to update collecting text
 local function updateCollectingText(mapType, starID)
     if mapType == "MainMap" then
         mainMapLabel.Text = "Collecting star ID " .. starID .. " in MainMap"
-    elseif mapType == "MOON GLITCH ZONE NOT IN DATA FILES YET" then
+    elseif mapType == "LNY2025GlitchZone" then
         glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in LNY2025GlitchZone"
     elseif mapType == "MoonInterior" then
         moonInteriorLabel.Text = "Collecting star ID " .. starID .. " in MoonInterior"
     end
 end
 
--- Function to collect the special stars for MoonInterior and MainMap
-local function collectSpecialStar()
-    while true do -- Loop for collecting the special stars
-        -- Collect special star for MoonInterior
-        local argsMoonInterior = {
-            [1] = "MoonInterior",
-            [2] = "13",  -- Special star ID for MoonInterior
-            [3] = true
-        }
-        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
+-- Stars Table
+local starsTable = {
+    {"MainMap", 100},
+    {"LNY2025GlitchZone", 200},
+    {"MoonInterior", 300},
+}
 
-        -- Collect special star for MainMap
-        local argsMainMap = {
-            [1] = "MainMap",
-            [2] = "111",  -- Special star ID for MainMap
-            [3] = true
-        }
-        ShootingStarCollected:FireServer(unpack(argsMainMap))
-
-        specialStarCount = specialStarCount + 2  -- Increment the special stars count by 2
-        specialStarsLabel.Text = "Special Stars Count: " .. specialStarCount  -- Update label text for both collections
-        updateCollectingText("MoonInterior", "13")  -- Update UI for special star collection
-        updateCollectingText("MainMap", "111")  -- Update UI for the additional star collection
-        wait(10)  -- Wait in between special star collections (adjust as necessary)
+-- Function to collect stars
+local function collectStarsLoop(mapType, startID)
+    while true do
+        for starID = startID, startID + 900 do
+            updateCollectingText(mapType, tostring(starID))
+            ShootingStarCollected:FireServer(mapType, tostring(starID))
+            wait(0.1)
+        end
+        wait(0.1)
     end
 end
 
--- Functions to collect stars depending on the map type
-local function collectStarsLoop(mapName, startID)
+-- Function for special star collection
+local function collectSpecialStar()
     while true do
-        for starID = startID, startID + 900 do -- Adjusting to your ID range
-            updateCollectingText(mapName, tostring(starID)) -- Update the collecting text
-            ShootingStarCollected:FireServer(mapName, tostring(starID))
-            wait(0.1) -- Wait for the adjusted collection speed
-        end
-        wait(0.1) -- Wait for the adjusted collection speed
+        -- Collecting special stars
+        local argsMoonInterior = {"MoonInterior", "13", true}
+        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
+        
+        local argsMainMap = {"MainMap", "111", true}
+        ShootingStarCollected:FireServer(unpack(argsMainMap))
+        
+        specialStarCount = specialStarCount + 2
+        specialStarsLabel.Text = "Special Stars Count: " .. tostring(specialStarCount)
+        updateCollectingText("MoonInterior", "13")
+        updateCollectingText("MainMap", "111")
+        wait(10)
     end
 end
 
 -- Function to start all collection loops
 local function startAllCollectingLoops()
-    coroutine.wrap(collectStarsLoop)("MainMap", 100) -- Start collecting in MainMap
-    coroutine.wrap(collectStarsLoop)("LNY2025GlitchZone", 200) -- Start collecting in Glitch Zone
-    coroutine.wrap(collectStarsLoop)("MoonInterior", 300) -- Start collecting in Moon Interior
+    for _, map in ipairs(starsTable) do
+        local mapName = map[1]
+        local startId = map[2]
+        coroutine.wrap(function() collectStarsLoop(mapName, startId) end)()
+    end
+
+    coroutine.wrap(collectSpecialStar)() -- Wrap the special star collection in a coroutine
+    coroutine.wrap(startTitleUpdater)() -- Wrap the title updater
 end
 
--- Function to close the UI when the close button is clicked
+-- Close Button Functionality
 closeButton.MouseButton1Click:Connect(function()
-    print("Close button clicked") -- Debugging line to see if the function is called
-    frame:Destroy() -- Destroy the frame
-    closeButton:Destroy() -- Destroy the close button
+    print("Close button clicked") 
+    frame:Destroy()
+    closeButton:Destroy()
 end)
 
--- Start collecting special stars in a separate coroutine
-coroutine.wrap(collectSpecialStar)()  -- Fire the special star collection in parallel
-
--- Start the loops in parallel for other star collections
+-- Start all collecting loops
 startAllCollectingLoops()
 
--- Dragging functionality for the frame
+-- Dragging functionality
 local dragging = false
 local dragStart = nil
 local startPos = nil
