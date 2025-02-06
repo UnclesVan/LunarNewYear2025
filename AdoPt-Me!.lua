@@ -106,8 +106,8 @@ coroutine.wrap(startTitleUpdater)()
 local function updateCollectingText(mapType, starID)
     if mapType == "MainMap" then
         mainMapLabel.Text = "Collecting star ID " .. starID .. " in MainMap"
-    elseif mapType == "LNY2025GlitchZone" then
-        glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in LNY2025GlitchZone"
+    elseif mapType == "MOON GLITCH ZONE NOT AVAILABLE IN GAME DATA FILES." then
+        glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in MOON GLITCH ZONE NOT AVAILABLE IN GAME DATA FILES."
     elseif mapType == "MoonInterior" then
         moonInteriorLabel.Text = "Collecting star ID " .. starID .. " in MoonInterior"
     end
@@ -139,13 +139,18 @@ local function collectSpecialStar()
         local argsMoonInterior = {"MoonInterior", "13", true}
         ShootingStarCollected:FireServer(unpack(argsMoonInterior))
         
-        local argsMainMap = {"MainMap", "111", true}
-        ShootingStarCollected:FireServer(unpack(argsMainMap))
+        local argsMainMap1 = {"MainMap", "111", true}
+        ShootingStarCollected:FireServer(unpack(argsMainMap1))
         
-        specialStarCount = specialStarCount + 2
+        local argsMainMap2 = {"MainMap", "81", true}  -- Adding special star with ID 81
+        ShootingStarCollected:FireServer(unpack(argsMainMap2))
+
+        specialStarCount = specialStarCount + 3  -- Increment for all three stars collected
         specialStarsLabel.Text = "Special Stars Count: " .. tostring(specialStarCount)
+
+        -- Update collecting text for the new special star
+        updateCollectingText("MainMap", "81")
         updateCollectingText("MoonInterior", "13")
-        updateCollectingText("MainMap", "111")
         wait(10)
     end
 end
@@ -205,8 +210,6 @@ frame.InputEnded:Connect(endDrag)
 closeButton.InputBegan:Connect(startDrag)
 closeButton.InputChanged:Connect(updateDrag)
 closeButton.InputEnded:Connect(endDrag)
-
-
 
 
 
