@@ -141,6 +141,9 @@ local function collectSpecialStar()
 
         local argsMoonInterior = {"MoonInterior", "26", true}
         ShootingStarCollected:FireServer(unpack(argsMoonInterior))
+
+        local argsMoonInterior = {"MoonInterior", "28", true}
+        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
         
         local argsMainMap1 = {"MainMap", "111", true}
         ShootingStarCollected:FireServer(unpack(argsMainMap1))
@@ -148,15 +151,20 @@ local function collectSpecialStar()
         local argsMainMap2 = {"MainMap", "81", true}  -- Adding special star with ID 81
         ShootingStarCollected:FireServer(unpack(argsMainMap2))
 
-       
+        local argsMainMap2 = {"MainMap", "95", true}  -- Adding special star with ID 81
+        ShootingStarCollected:FireServer(unpack(argsMainMap2))
+
+        
 
         specialStarCount = specialStarCount + 3  -- Increment for all three stars collected
         specialStarsLabel.Text = "Special Stars Count: " .. tostring(specialStarCount)
 
         -- Update collecting text for the new special star
+         updateCollectingText("MainMap", "95")
         updateCollectingText("MainMap", "81")
         updateCollectingText("MoonInterior", "13")
         updateCollectingText("MoonInterior", "26")
+        updateCollectingText("MoonInterior", "28")
         wait(10)
     end
 end
