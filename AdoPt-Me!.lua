@@ -9,12 +9,10 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/UnclesVan/AdoPtMe-/r
 
 
 
--- Script to create and control a user interface for collecting stars on the moon
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local ScreenGui = Instance.new("ScreenGui")
 
--- Updated this line to conform to the specified API structure
 local ShootingStarCollected = ReplicatedStorage.API["MoonAPI/ShootingStarCollected"]
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -72,7 +70,7 @@ local function createTextLabel(parent, position, labelText)
 end
 
 mainMapLabel = createTextLabel(frame, UDim2.new(0, 0, 0.0, 0), "Collecting Stars in MainMap...")
-glitchZoneLabel = createTextLabel(frame, UDim2.new(0, 0, 0.25, 0), "Collecting Stars in LNY2025GlitchZone...")
+glitchZoneLabel = createTextLabel(frame, UDim2.new(0, 0, 0.25, 0), "Collecting Stars in Glitch Zone...")
 specialStarsLabel = createTextLabel(frame, UDim2.new(0, 0, 0.5, 0), "Special Stars Count: 0")
 moonInteriorLabel = createTextLabel(frame, UDim2.new(0, 0, 0.75, 0), "Collecting Stars in MoonInterior...")
 
@@ -81,11 +79,15 @@ local specialStarCount = 0
 
 -- Function to get Event Time Text
 local function getEventTimeText()
-    local eventTime = player.PlayerGui:FindFirstChild("QuestIconApp") and player.PlayerGui.QuestIconApp.ImageButton.EventContainer.EventFrame.EventImageBottom.EventTime
-    return eventTime and eventTime.Text or "Event Time Not Available"
+    local questIconApp = player.PlayerGui:FindFirstChild("QuestIconApp")
+    if questIconApp then
+        local eventTime = questIconApp:FindFirstChild("ImageButton"):FindFirstChild("EventContainer"):FindFirstChild("EventFrame"):FindFirstChild("EventImageBottom"):FindFirstChild("EventTime")
+        return eventTime and eventTime.Text or "Event Time Not Available"
+    end
+    return "QuestIconApp Not Available"
 end
 
--- Function to update the title
+-- Update the title
 local function updateTitle()
     titleLabel.Text = getEventTimeText()
 end
@@ -93,21 +95,19 @@ end
 updateTitle()
 
 -- Update the title every second
-local function startTitleUpdater()
+coroutine.wrap(function()
     while true do
         updateTitle()
         wait(1)
     end
-end
-
-coroutine.wrap(startTitleUpdater)()
+end)()
 
 -- Function to update collecting text
 local function updateCollectingText(mapType, starID)
     if mapType == "MainMap" then
         mainMapLabel.Text = "Collecting star ID " .. starID .. " in MainMap"
-    elseif mapType == "MOON GLITCH ZONE NOT AVAILABLE IN GAME DATA FILES." then
-        glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in MOON GLITCH ZONE NOT AVAILABLE IN GAME DATA FILES."
+    elseif mapType == "GlitchZone" then
+        glitchZoneLabel.Text = "Collecting star ID " .. starID .. " in Glitch Zone"
     elseif mapType == "MoonInterior" then
         moonInteriorLabel.Text = "Collecting star ID " .. starID .. " in MoonInterior"
     end
@@ -116,7 +116,7 @@ end
 -- Stars Table
 local starsTable = {
     {"MainMap", 100},
-    {"LNY2025GlitchZone", 200},
+    {"GlitchZone", 200},
     {"MoonInterior", 300},
 }
 
@@ -135,32 +135,17 @@ end
 -- Function for special star collection
 local function collectSpecialStar()
     while true do
-        -- Collecting special stars
-        local argsMoonInterior = {"MoonInterior", "13", true}
-        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
+        local specialStarIDs = {"13", "26", "28", "111", "81", "95"}
+        for _, starID in ipairs(specialStarIDs) do
+            local mapType = (starID == "111" or starID == "81" or starID == "95") and "MainMap" or "MoonInterior"
+            ShootingStarCollected:FireServer(mapType, starID, true)
+        end
 
-        local argsMoonInterior = {"MoonInterior", "26", true}
-        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
-
-        local argsMoonInterior = {"MoonInterior", "28", true}
-        ShootingStarCollected:FireServer(unpack(argsMoonInterior))
-        
-        local argsMainMap1 = {"MainMap", "111", true}
-        ShootingStarCollected:FireServer(unpack(argsMainMap1))
-        
-        local argsMainMap2 = {"MainMap", "81", true}  -- Adding special star with ID 81
-        ShootingStarCollected:FireServer(unpack(argsMainMap2))
-
-        local argsMainMap2 = {"MainMap", "95", true}  -- Adding special star with ID 81
-        ShootingStarCollected:FireServer(unpack(argsMainMap2))
-
-        
-
-        specialStarCount = specialStarCount + 3  -- Increment for all three stars collected
+        specialStarCount = specialStarCount + #specialStarIDs  -- Increment count for all three stars collected
         specialStarsLabel.Text = "Special Stars Count: " .. tostring(specialStarCount)
 
         -- Update collecting text for the new special star
-         updateCollectingText("MainMap", "95")
+        updateCollectingText("MainMap", "95")
         updateCollectingText("MainMap", "81")
         updateCollectingText("MoonInterior", "13")
         updateCollectingText("MoonInterior", "26")
@@ -177,15 +162,13 @@ local function startAllCollectingLoops()
         coroutine.wrap(function() collectStarsLoop(mapName, startId) end)()
     end
 
-    coroutine.wrap(collectSpecialStar)() -- Wrap the special star collection in a coroutine
-    coroutine.wrap(startTitleUpdater)() -- Wrap the title updater
+    coroutine.wrap(collectSpecialStar)() -- Start special star collection
 end
 
 -- Close Button Functionality
 closeButton.MouseButton1Click:Connect(function()
-    print("Close button clicked") 
+    print("Close button clicked")
     frame:Destroy()
-    closeButton:Destroy()
 end)
 
 -- Start all collecting loops
@@ -219,11 +202,10 @@ end
 frame.InputBegan:Connect(startDrag)
 frame.InputChanged:Connect(updateDrag)
 frame.InputEnded:Connect(endDrag)
-
--- Connect dragging to the close button
 closeButton.InputBegan:Connect(startDrag)
 closeButton.InputChanged:Connect(updateDrag)
 closeButton.InputEnded:Connect(endDrag)
+
 
 
 
