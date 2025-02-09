@@ -147,6 +147,7 @@ local function collectSpecialStar()
         -- Update collecting text for the new special star
         updateCollectingText("MainMap", "95")
         updateCollectingText("MainMap", "81")
+        updateCollectingText("MoonInterior", "2")
         updateCollectingText("MoonInterior", "13")
         updateCollectingText("MoonInterior", "26")
         updateCollectingText("MoonInterior", "28")
