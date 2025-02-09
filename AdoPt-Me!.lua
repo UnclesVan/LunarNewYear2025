@@ -16,6 +16,7 @@ local ScreenGui = Instance.new("ScreenGui")
 local ShootingStarCollected = ReplicatedStorage.API["MoonAPI/ShootingStarCollected"]
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
+playerGui.Enabled = true
 
 ScreenGui.Parent = playerGui
 
@@ -92,6 +93,7 @@ local function updateTitle()
     titleLabel.Text = getEventTimeText()
 end
 
+-- Initialize title
 updateTitle()
 
 -- Update the title every second
@@ -137,14 +139,14 @@ local function collectSpecialStar()
     while true do
         local specialStarIDs = { "2", "13", "26", "28", "111", "81", "95"}
         for _, starID in ipairs(specialStarIDs) do
-            local mapType = (starID == "111" or starID == "81" or starID == "95" starID == "2") and "MainMap" or "MoonInterior"
+            local mapType = (starID == "111" or starID == "81" or starID == "95" or starID == "2") and "MainMap" or "MoonInterior"
+            print("Collecting star ID: " .. starID .. " in " .. mapType) 
             ShootingStarCollected:FireServer(mapType, starID, true)
         end
 
-        specialStarCount = specialStarCount + #specialStarIDs  -- Increment count for all three stars collected
+        specialStarCount = specialStarCount + #specialStarIDs  
         specialStarsLabel.Text = "Special Stars Count: " .. tostring(specialStarCount)
 
-        -- Update collecting text for the new special star
         updateCollectingText("MainMap", "95")
         updateCollectingText("MainMap", "81")
         updateCollectingText("MoonInterior", "2")
