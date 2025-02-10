@@ -54,7 +54,7 @@ closeButton.BorderSizePixel = 2
 closeButton.Parent = frame
 
 -- Text Labels for Different Zones
-local mainMapLabel, glitchZoneLabel, specialStarsLabel, moonInteriorLabel
+local mainMapLabel, glitchZoneLabel, specialStarsLabel, moonInteriorLabel, royalMoonEggsLabel
 
 -- Function that initializes the text labels
 local function createTextLabel(parent, position, labelText)
@@ -74,8 +74,12 @@ glitchZoneLabel = createTextLabel(frame, UDim2.new(0, 0, 0.25, 0), "Collecting S
 specialStarsLabel = createTextLabel(frame, UDim2.new(0, 0, 0.5, 0), "Special Stars Count: 0")
 moonInteriorLabel = createTextLabel(frame, UDim2.new(0, 0, 0.75, 0), "Collecting Stars in MoonInterior...")
 
--- Counter for special stars collected
+-- New label for Royal Moon Eggs
+royalMoonEggsLabel = createTextLabel(frame, UDim2.new(0, 0, 1.0, 0), "Royal Moon Eggs Count: 0")
+
+-- Counter for special stars and royal moon eggs collected
 local specialStarCount = 0
+local royalMoonEggCount = 0
 
 -- Function to get Event Time Text
 local function getEventTimeText()
@@ -152,7 +156,20 @@ local function collectSpecialStar()
         updateCollectingText("MoonInterior", "26")
         updateCollectingText("MoonInterior", "28")
         updateCollectingText("MoonInterior", "2")
-        wait(10)
+        wait(10) -- Wait before repeating
+    end
+end
+
+-- Function for royal moon egg collection
+local function collectRoyalMoonEggs()
+    while true do
+        local args = { [1] = "MoonInterior" }
+        ReplicatedStorage.API:FindFirstChild("MoonAPI/ClaimRoyalEgg"):FireServer(unpack(args))
+        
+        royalMoonEggCount = royalMoonEggCount + 1  -- Increment count for each royal moon egg collected
+        royalMoonEggsLabel.Text = "Royal Moon Eggs Count: " .. tostring(royalMoonEggCount)
+
+        wait(10) -- Adjust the wait time as necessary
     end
 end
 
@@ -165,6 +182,7 @@ local function startAllCollectingLoops()
     end
 
     coroutine.wrap(collectSpecialStar)() -- Start special star collection
+    coroutine.wrap(collectRoyalMoonEggs)() -- Start royal moon egg collection
 end
 
 -- Close Button Functionality
@@ -207,7 +225,6 @@ frame.InputEnded:Connect(endDrag)
 closeButton.InputBegan:Connect(startDrag)
 closeButton.InputChanged:Connect(updateDrag)
 closeButton.InputEnded:Connect(endDrag)
-
 
 
 
