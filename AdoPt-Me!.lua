@@ -137,14 +137,14 @@ local function collectSpecialStar()
     while true do
         local specialStarIDs = {"13", "26", "28", "111", "81", "95", "2", "7"}
         for _, starID in ipairs(specialStarIDs) do
-            local mapType = (starID == "111" or starID == "81" or starID == "95" or starID == "2" starID == "7") and "MainMap" or "MoonInterior"
+            local mapType = (starID == "111" or starID == "81" or starID == "95" or starID == "2" or starID == "7") and "MainMap" or "MoonInterior"
             ShootingStarCollected:FireServer(mapType, starID, true)
         end
 
-        specialStarCount = specialStarCount + #specialStarIDs  -- Increment count for all three stars collected
+        specialStarCount = specialStarCount + #specialStarIDs  -- Increment count for all special stars collected
         specialStarsLabel.Text = "Special Stars Count: " .. tostring(specialStarCount)
 
-        -- Update collecting text for the new special star
+        -- Update collecting text for each special star
         updateCollectingText("MainMap", "7")
         updateCollectingText("MainMap", "95")
         updateCollectingText("MainMap", "81")
@@ -158,7 +158,7 @@ end
 
 -- Function to start all collection loops
 local function startAllCollectingLoops()
-    for _, map in ipairs(starsTable) do
+    for _, map in pairs(starsTable) do
         local mapName = map[1]
         local startId = map[2]
         coroutine.wrap(function() collectStarsLoop(mapName, startId) end)()
