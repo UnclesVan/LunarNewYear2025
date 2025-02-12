@@ -41,6 +41,7 @@ local function createLunarEventUI()
     ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
     local ShootingStarCollected = ReplicatedStorage.API["MoonAPI/ShootingStarCollected"]
+    local RoyalEggClaimed = ReplicatedStorage.API["MoonAPI/ClaimRoyalEgg"]
 
     -- Frame setup
     local frame = Instance.new("Frame")
@@ -77,9 +78,9 @@ local function createLunarEventUI()
     closeButton.Parent = frame
 
     -- Text Labels for Different Zones
-    local mainMapLabel, glitchZoneLabel, specialStarsLabel, moonInteriorLabel
+    local mainMapLabel, glitchZoneLabel, specialStarsLabel, moonInteriorLabel, royalEggsLabel
 
-    -- Function that initializes the text labels
+    -- Function to create text labels
     local function createTextLabel(parent, position, labelText)
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1, 0, 0.25, 0)
@@ -96,9 +97,11 @@ local function createLunarEventUI()
     glitchZoneLabel = createTextLabel(frame, UDim2.new(0, 0, 0.25, 0), "Collecting Stars in Glitch Zone...")
     specialStarsLabel = createTextLabel(frame, UDim2.new(0, 0, 0.5, 0), "Special Stars Count: 0")
     moonInteriorLabel = createTextLabel(frame, UDim2.new(0, 0, 0.75, 0), "Collecting Stars in MoonInterior...")
+    royalEggsLabel = createTextLabel(frame, UDim2.new(0, 0, 0.9, 0), "Collected Royal Moon Eggs: 0")
 
-    -- Counter for special stars collected
+    -- Counters
     local specialStarCount = 0
+    local royalEggCount = 0
 
     -- Get Event Time Text
     local function getEventTimeText()
@@ -190,7 +193,23 @@ local function createLunarEventUI()
         end
     end
 
-    -- Function to start all collection loops
+    -- Function to collect Royal Moon Eggs
+    local function collectRoyalEggs()
+        while true do
+            wait(5) -- Adjust the wait time as needed
+            
+            -- Claim a Royal Moon Egg
+            local args = {
+                [1] = "MoonInterior" -- Replace this with the actual map where the egg is collected.
+            }
+            RoyalEggClaimed:FireServer(unpack(args)) -- Fire the server event for egg collection
+            
+            royalEggCount = royalEggCount + 1
+            royalEggsLabel.Text = "Collected Royal Moon Eggs: " .. tostring(royalEggCount)
+        end
+    end
+
+    -- Function to start all collecting loops
     local function startAllCollectingLoops()
         for _, map in pairs(starsTable) do
             local mapName = map[1]
@@ -199,6 +218,7 @@ local function createLunarEventUI()
         end
 
         coroutine.wrap(collectSpecialStar)() -- Start special star collection
+        coroutine.wrap(collectRoyalEggs)() -- Start royal egg collection
     end
 
     -- Close Button Functionality
@@ -266,7 +286,7 @@ local function createValentinesEventUI()
     titleLabel.TextScaled = true
     titleLabel.Text = "Valentines Event"
     titleLabel.Parent = frame
-    
+
     -- Close Button for Valentines Event UI
     local closeButton = Instance.new("TextButton")
     closeButton.Size = UDim2.new(0.07, 0, 0.07, 0)
@@ -276,7 +296,7 @@ local function createValentinesEventUI()
     closeButton.BorderColor3 = Color3.fromRGB(200, 0, 0)
     closeButton.BorderSizePixel = 2
     closeButton.Parent = frame
-    
+
     closeButton.MouseButton1Click:Connect(function()
         print("Valentines Event UI Closed")
         ScreenGui:Destroy()
@@ -322,7 +342,6 @@ end)
 
 -- Starting the automated process for Lunar Event
 autoToggleLunarEvent()
-
 
 
 
